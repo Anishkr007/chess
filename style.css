@@ -1,63 +1,75 @@
+/* ==============================
+   CHESS.COM BY ANISH - STYLE.CSS
+   ============================== */
+
 /* Custom font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
 body {
     font-family: 'Inter', sans-serif;
+    background-color: #1f2937; /* gray-800 */
+    color: #fff;
 }
 
-/* New Header Style */
+/* Header */
 .header-title {
     text-shadow: 0 2px 15px rgba(255, 255, 255, 0.2);
 }
 
-/* Ensure board is square */
+/* -----------------------------
+   CHESSBOARD LAYOUT
+   ----------------------------- */
 #chessboard {
     display: grid;
     grid-template-columns: repeat(8, 1fr);
-    max-width: 90vmin; /* Max width relative to viewport height/width */
-    max-height: 90vmin;
-    width: 100%;
-    aspect-ratio: 1 / 1; /* Make it square */
-    border: 4px solid #4a2311;
-    border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    position: relative; /* For GSAP animation cloning */
+    grid-template-rows: repeat(8, 1fr);
+    width: min(90vmin, 700px);
+    height: min(90vmin, 700px);
+    border: 5px solid var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+    transition: all 0.3s ease;
     
-    /* --- New Theme Variables --- */
+    /* Theme variables */
     --light-square: #f0d9b5;
     --dark-square: #b58863;
     --border-color: #4a2311;
-    transition: border-color 0.3s ease;
-    border-color: var(--border-color);
 }
 
-/* --- New Dark Theme --- */
+/* Dark Theme (Green Classic) */
 #chessboard.dark-theme {
-    --light-square: #e3e9e0; /* Light green/gray */
-    --dark-square: #6a994e;  /* Dark green */
-    --border-color: #446132; /* Darker border */
+    --light-square: #e3e9e0;
+    --dark-square: #6a994e;
+    --border-color: #446132;
 }
 
-
+/* -----------------------------
+   CELLS AND PIECES
+   ----------------------------- */
 .cell {
+    aspect-ratio: 1 / 1;
     width: 100%;
-    height: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     position: relative;
-    /* Disable text selection */
     user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    transition: background-color 0.3s ease; /* Smooth color change */
+    transition: transform 0.15s ease, background-color 0.3s ease;
 }
 
-/* Updated to use CSS Variables */
-.light { background-color: var(--light-square); }
-.dark { background-color: var(--dark-square); }
+.cell:hover {
+    transform: scale(1.03);
+    z-index: 2;
+}
 
-/* Piece container */
+.light { background-color: var(--light-square); transition: background 0.4s ease; }
+.dark { background-color: var(--dark-square); transition: background 0.4s ease; }
+
+/* Piece Styling */
 .piece {
     position: relative;
     z-index: 10;
@@ -66,38 +78,42 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: clamp(2rem, 8vmin, 4rem); /* Responsive font size */
-    pointer-events: none; /* Allows clicking the cell underneath */
-    transition: transform 0.15s ease-in-out;
+    font-size: clamp(2.5rem, 8vmin, 4rem);
+    pointer-events: none;
+    transition: transform 0.2s ease, filter 0.2s ease;
 }
 
-/* Hover effect for pieces */
 .cell:hover .piece {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
 }
 
 /* Piece colors */
 .white-piece { color: #ffffff; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
 .black-piece { color: #000000; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
 
-/* Highlights */
+/* -----------------------------
+   HIGHLIGHTS AND EFFECTS
+   ----------------------------- */
+
+/* Selected piece */
 .selected {
-    background-color: #6a994e !important; /* Green highlight for selected piece */
+    background-color: #6a994e !important;
     filter: brightness(1.2);
 }
 
+/* King in check */
 .in-check {
-    background-color: #e63946 !important; /* Red for king in check */
-    animation: pulse-check 1.5s infinite;
+    background-color: #e63946 !important;
+    animation: pulse-check 1.2s infinite;
 }
-
 @keyframes pulse-check {
-    0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); }
-    70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.6); }
+    70% { box-shadow: 0 0 0 12px rgba(230, 57, 70, 0); }
     100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
 }
 
-/* Valid move indicator (replaces ::after) */
+/* Valid move indicator */
 .valid-move-indicator {
     position: absolute;
     top: 50%;
@@ -110,7 +126,7 @@ body {
     z-index: 1;
 }
 
-/* Valid capture indicator (replaces ::before) */
+/* Valid capture indicator */
 .valid-capture-indicator {
     position: absolute;
     top: 0;
@@ -123,60 +139,112 @@ body {
     z-index: 1;
 }
 
-/* New highlight for last move */
+/* Last move highlight */
 .last-move {
-    background-color: rgba(209, 231, 191, 0.7) !important; /* Light green highlight */
+    background-color: rgba(255, 255, 0, 0.3) !important;
+    animation: lastMoveGlow 1s ease-in-out;
+}
+@keyframes lastMoveGlow {
+    0% { box-shadow: 0 0 0 rgba(255,255,0,0.5); }
+    100% { box-shadow: 0 0 20px rgba(255,255,0,0.3); }
 }
 
-/* New styles for captured pieces box */
+/* -----------------------------
+   CAPTURED PIECES SECTION
+   ----------------------------- */
 .captured-box {
     width: 100%;
     min-height: 100px;
-    background-color: #4a5568; /* gray-700 */
+    background-color: #4a5568;
     border-radius: 8px;
     padding: 12px;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+    overflow: hidden;
 }
 
 .captured-box h3 {
-    border-bottom: 2px solid #a0aec0; /* gray-400 */
+    border-bottom: 2px solid #a0aec0;
     padding-bottom: 4px;
     margin-bottom: 8px;
     font-weight: 600;
-    color: #e2e8f0; /* gray-200 */
+    color: #e2e8f0;
 }
 
 .captured-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(2.5rem, 1fr));
     gap: 4px;
-    font-size: 2.5rem; /* Match piece size */
+    font-size: 2.5rem;
 }
 
-/* Modal animation */
+/* Scroll styling for captured pieces (desktop) */
+@media (min-width: 1024px) {
+    .captured-box {
+        width: 180px;
+        height: min(90vmin, 700px);
+        overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: #888 #4a5568;
+    }
+    .captured-box::-webkit-scrollbar {
+        width: 6px;
+    }
+    .captured-box::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 3px;
+    }
+    .captured-grid {
+        grid-template-columns: repeat(2, 1fr);
+        font-size: 2.75rem;
+    }
+}
+
+/* -----------------------------
+   PROMOTION MODAL
+   ----------------------------- */
 #promotion-modal.hidden {
     opacity: 0;
     pointer-events: none;
 }
-
-/* Button hover effect */
-#reset-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.5); /* Red shadow */
+#promotion-modal {
+    transition: opacity 0.3s ease;
 }
 
+/* -----------------------------
+   BUTTONS & CONTROLS
+   ----------------------------- */
+#reset-button {
+    background-color: #dc2626;
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.125rem;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    transition: all 0.2s ease;
+}
+#reset-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.5);
+}
+#reset-button:active {
+    transform: scale(0.96);
+}
 
-/* Responsive layout queries */
-@media (min-width: 1024px) { /* lg breakpoint */
-    .captured-box {
-        width: 180px; /* Fixed width on large screens */
-        /* Updated: Set height to match board height */
-        height: 90vmin; 
-        max-height: 90vmin;
-        overflow-y: auto; /* Add scroll if many pieces are captured */
-    }
-    .captured-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 columns on large screens */
-        font-size: 2.75rem;
-    }
+/* Message animation */
+#message-display.blinking {
+    animation: blink 1s infinite;
+}
+@keyframes blink {
+    0%, 50%, 100% { opacity: 1; }
+    25%, 75% { opacity: 0.4; }
+}
+
+/* Footer credit */
+p.text-gray-500 {
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+p.text-gray-500:hover {
+    opacity: 1;
 }
