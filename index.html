@@ -4,32 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chess.com</title>
-    <!-- Load Tailwind CSS -->
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Load GSAP (for animation) -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <!-- Link to your external CSS file -->
+    
     <link rel="stylesheet" href="style.css">
 </head>
-<!-- Removed 'overflow-hidden' from the body class to allow scrolling on mobile -->
 <body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center p-4">
 
-    <!-- Game Container -->
+    
     <div class="flex flex-col items-center w-full max-w-6xl mx-auto">
     
-        <!-- Header -->
+        
         <div class="text-center mb-4 w-full">
-            <!-- Changed title -->
+            
             <h1 class="header-title text-4xl md:text-5xl font-bold text-white tracking-tight">ANISH'S CHESS .COM</h1>
             <div id="turn-indicator" class="text-2xl font-semibold text-gray-300 mt-2">White's Turn</div>
             <div id="message-display" class="text-xl font-bold h-8 mt-2 text-yellow-400">&nbsp;</div>
         </div>
 
-        <!-- Main Game Area (Board + Captured) -->
-        <!-- I've changed 'lg:items-center' to 'lg:items-stretch' to make the boxes match the board height on desktop -->
         <div class="flex flex-col lg:flex-row items-center lg:items-stretch justify-center w-full gap-4">
         
-            <!-- Captured by White (Black's pieces) -->
+            
             <div id="captured-by-white" class="captured-box order-1 lg:order-1">
                 <h3>Captured by White</h3>
                 <div id="captured-white-grid" class="captured-grid">
@@ -84,8 +81,6 @@
         </div>
     </div>
 
-    <!-- Link to your new external JavaScript file -->
-    <!-- 'defer' ensures the script runs after the HTML is loaded -->
     <script src="script.js" defer></script>
 </body>
 </html>
