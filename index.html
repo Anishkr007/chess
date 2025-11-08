@@ -3,12 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Chess Game</title>
+    <title>chess.com</title>
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Link to your new external CSS file -->
+    <!-- Load GSAP (for animation) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <!-- Link to your external CSS file -->
     <link rel="stylesheet" href="style.css">
 </head>
+<!-- Removed 'overflow-hidden' from the body class to allow scrolling on mobile -->
 <body class="bg-gray-800 text-white min-h-screen flex flex-col items-center justify-center p-4">
 
     <!-- Game Container -->
@@ -16,13 +19,15 @@
     
         <!-- Header -->
         <div class="text-center mb-4 w-full">
-            <h1 class="text-4xl md:text-5xl font-bold text-white tracking-tight">HTML Chess</h1>
+            <!-- Changed title -->
+            <h1 class="header-title text-4xl md:text-5xl font-bold text-white tracking-tight">ANISH'S CHESS .COM</h1>
             <div id="turn-indicator" class="text-2xl font-semibold text-gray-300 mt-2">White's Turn</div>
             <div id="message-display" class="text-xl font-bold h-8 mt-2 text-yellow-400">&nbsp;</div>
         </div>
 
         <!-- Main Game Area (Board + Captured) -->
-        <div class="flex flex-col lg:flex-row items-center justify-center w-full gap-4">
+        <!-- I've changed 'lg:items-center' to 'lg:items-stretch' to make the boxes match the board height on desktop -->
+        <div class="flex flex-col lg:flex-row items-center lg:items-stretch justify-center w-full gap-4">
         
             <!-- Captured by White (Black's pieces) -->
             <div id="captured-by-white" class="captured-box order-1 lg:order-1">
@@ -48,16 +53,29 @@
         </div>
 
         <!-- Controls -->
-        <button id="reset-button" class="mt-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-200 transform active:scale-95">
-            Reset Game
-        </button>
+        <!-- Wrapped controls in a flex container for alignment -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mt-6">
+            <button id="reset-button" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition-all duration-200 transform active:scale-95">
+                Reset Game
+            </button>
+            
+            <!-- New Theme Toggle Switch -->
+            <div class="flex items-center space-x-3">
+                <span class="text-gray-400 font-medium">Classic</span>
+                <label for="theme-toggle" class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="theme-toggle" class="sr-only peer">
+                    <div class="w-11 h-6 bg-gray-600 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                </label>
+                <span class="text-gray-400 font-medium">Green</span>
+            </div>
+        </div>
         
-        <!-- Added credit -->
+        <!-- Credit -->
         <p class="text-gray-500 text-sm mt-4">Made by Anish</p>
     </div>
 
     <!-- Promotion Modal -->
-    <div id="promotion-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center hidden z-50">
+    <div id="promotion-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 transition-opacity duration-300 ease-out hidden">
         <div class="bg-white rounded-lg p-6 text-gray-900 text-center">
             <h3 class="text-2xl font-bold mb-4">Promote Pawn</h3>
             <div id="promotion-choices" class="flex space-x-4 text-6xl cursor-pointer">
