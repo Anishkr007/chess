@@ -1,0 +1,129 @@
+/* Custom font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Ensure board is square */
+#chessboard {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    max-width: 90vmin; /* Max width relative to viewport height/width */
+    max-height: 90vmin;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Make it square */
+    border: 4px solid #4a2311;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+.cell {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(2rem, 8vmin, 4rem); /* Responsive font size */
+    cursor: pointer;
+    position: relative;
+    /* Disable text selection */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+.light { background-color: #f0d9b5; }
+.dark { background-color: #b58863; }
+
+/* Piece colors */
+.white-piece { color: #ffffff; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+.black-piece { color: #000000; text-shadow: 0 0 5px rgba(255,255,255,0.3); }
+
+/* Highlights */
+.selected {
+    background-color: #6a994e !important; /* Green highlight for selected piece */
+    filter: brightness(1.2);
+}
+
+.in-check {
+    background-color: #e63946 !important; /* Red for king in check */
+    animation: pulse-check 1.5s infinite;
+}
+
+@keyframes pulse-check {
+    0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(230, 57, 70, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+}
+
+/* Valid move indicator */
+.valid-move::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+    height: 30%;
+    background-color: rgba(46, 139, 87, 0.4);
+    border-radius: 50%;
+    pointer-events: none; /* Allows clicking the cell underneath */
+}
+
+/* Valid capture indicator */
+.valid-capture::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 4px solid rgba(46, 139, 87, 0.4);
+    border-radius: 4px;
+    box-sizing: border-box;
+    pointer-events: none;
+}
+
+/* New highlight for last move */
+.last-move {
+    background-color: rgba(209, 231, 191, 0.7) !important; /* Light green highlight */
+}
+
+/* New styles for captured pieces box */
+.captured-box {
+    width: 100%;
+    min-height: 100px;
+    background-color: #4a5568; /* gray-700 */
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.captured-box h3 {
+    border-bottom: 2px solid #a0aec0; /* gray-400 */
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #e2e8f0; /* gray-200 */
+}
+
+.captured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(2.5rem, 1fr));
+    gap: 4px;
+    font-size: 2.5rem; /* Match piece size */
+}
+
+/* Responsive layout queries */
+@media (min-width: 1024px) { /* lg breakpoint */
+    .captured-box {
+        width: 180px; /* Fixed width on large screens */
+        min-height: 600px; /* Taller on large screens */
+        height: 90vmin; /* Match board height */
+        max-height: 90vmin;
+    }
+    .captured-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on large screens */
+        font-size: 2.75rem;
+    }
+}
